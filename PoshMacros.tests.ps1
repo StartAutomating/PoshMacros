@@ -29,14 +29,14 @@ describe 'PoshMacros' {
         }
 
         it 'Can make a -uri macro' {
-            _+ -Name GitRepos -Uri 'https://api.github.com/users/:username/repos?page={page}&per_page=$perPage' -DefaultParameter @{
-                page = 1
-                perpage = 50
+            _+ -Name AzureDevOpsProject -Uri 'https://[server]/{Organization}/_apis/Projects/:Project?api-version=$apiVersion' -DefaultParameter @{
+                Server = 'dev.azure.com'
+                apiVersion = '5.1'
             }
 
-            $userName = 'StartAutomating'
-            $gitRepos = _GitRepos -Username $userName -perPage 1
-            $gitRepos.owner.login | should be $userName
+            _AzureDevOpsProject -Organization StartAutomating -Project PoshMacros |
+                Select-Object -ExpandProperty Name |
+                should be PoshMacros
         }
     }
 
